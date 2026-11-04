@@ -69,8 +69,8 @@ macOS can't build the Linux kernel, so `build-macos.sh` builds inside a [Lima](h
 
 <img src="assets/h-crew.svg" width="100%" alt="~/crew" />
 
-<img src="assets/crew.svg" width="100%" alt="Crew: 01 Altai Abdurahim and 02 Atay Mahmudov, team AA Linux" />
+<img src="assets/crew.svg" width="100%" alt="Crew: 01 Алтай Абдурахим and 02 Атай Махмудов, team AA Linux" />
 
 <br/>
 
-<a href="LICENSE"><img src="assets/footer.svg" width="100%" alt="Made by Altai and Atay, MIT license, 2026" /></a>
+<a href="LICENSE"><img src="assets/footer.svg" width="100%" alt="Made by Алтай and Атай, MIT license, 2026" /></a>

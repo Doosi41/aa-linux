@@ -449,7 +449,7 @@ def crew():
     s.defs.append(f'<linearGradient id="num" x1="0" y1="0" x2="1" y2="1">'
                   f'<stop offset="0" stop-color="{FOAM}"/><stop offset=".5" stop-color="{IRIS}"/>'
                   f'<stop offset="1" stop-color="{LOVE}"/></linearGradient>')
-    people = [(24, "01", "ALTAI", "ABDURAHIM", LOVE), (458, "02", "ATAY", "MAHMUDOV", FOAM)]
+    people = [(24, "01", "АЛТАЙ", "АБДУРАХИМ", LOVE), (458, "02", "АТАЙ", "МАХМУДОВ", FOAM)]
     for x, num, first, last, c in people:
         y, w = 24, 418
         s.window(x, y, w, 212, rx=16)
@@ -462,7 +462,7 @@ def crew():
               text(x + 76, y + 132, last, 15, SUBTLE, extra=' letter-spacing="6"'),
               f'<rect x="{x + 76}" y="{y + 152}" width="120" height="2" rx="1" fill="{c}"/>',
               text(x + 76, y + 178, "TEAM AA LINUX", 10.5, MUTED, extra=' letter-spacing="3"'))
-    return s.render("Crew: 01 Altai Abdurahim and 02 Atay Mahmudov, team AA Linux")
+    return s.render("Crew: 01 Алтай Абдурахим and 02 Атай Махмудов, team AA Linux")
 
 
 # ---------------------------------------------------------------- footer and section headers
@@ -473,10 +473,10 @@ def footer():
     s.add(text(48, 66, "AA", 16, "url(#pastel)", 800), text(78, 66, "linux", 13, SUBTLE),
           f'<rect x="132" y="56" width="20" height="10" rx="5" fill="{IRIS}"/>',
           *(f'<circle cx="{164 + i * 16}" cy="61" r="4" fill="none" stroke="{SUBTLE}" stroke-width="1.4"/>' for i in range(3)),
-          spans(450, 65, [("made by ", MUTED), ("altai", LOVE, "700"), (" × ", MUTED), ("atay", FOAM, "700")], 12.5,
+          spans(450, 65, [("made by ", MUTED), ("алтай", LOVE, "700"), (" × ", MUTED), ("атай", FOAM, "700")], 12.5,
                 ' text-anchor="middle"'),
           text(852, 65, "MIT · 2026", 11.5, MUTED, anchor="end"))
-    return s.render("Made by Altai and Atay, MIT license, 2026")
+    return s.render("Made by Алтай and Атай, MIT license, 2026")
 
 
 def header(name):
