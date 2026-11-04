@@ -1,118 +1,103 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:203a43,100:2c5364&height=200&section=header&text=AA%20Linux&fontSize=72&fontColor=ffffff&fontAlignY=35&desc=a%20Linux%20distribution%20built%20from%20scratch&descAlignY=56&animation=fadeIn" width="100%" alt="AA Linux" />
-
-<img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=500&size=20&pause=1000&color=2C9BCB&center=true&vCenter=true&width=560&lines=Linux+kernel+%2B+BusyBox+%2B+initramfs;From+power-on+to+shell+prompt;Made+on+an+M2+MacBook" alt="Linux kernel + BusyBox + initramfs" />
+<img src="assets/banner.svg" width="100%" alt="AA Linux 0.1: kernel 6.18.60 LTS, BusyBox init, aarch64, boots in QEMU" />
 
 <br/>
 
-<img src="https://img.shields.io/badge/kernel-6.18_LTS-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="kernel 6.18 LTS" />
-<img src="https://img.shields.io/badge/BusyBox-1.38-2C5364?style=for-the-badge" alt="BusyBox 1.38" />
-<img src="https://img.shields.io/badge/arch-arm64-0091BD?style=for-the-badge&logo=arm&logoColor=white" alt="arm64" />
-<img src="https://img.shields.io/badge/runs_in-QEMU-FF6600?style=for-the-badge&logo=qemu&logoColor=white" alt="QEMU" />
-<img src="https://img.shields.io/badge/status-boots_to_shell-brightgreen?style=for-the-badge" alt="status: boots to shell" />
-<img src="https://img.shields.io/github/license/Doosi41/aa-linux?style=for-the-badge" alt="license" />
+<img alt="kernel 6.18 LTS" src="https://img.shields.io/badge/kernel-6.18_LTS-c4a7e7?style=flat-square&labelColor=17141f" />
+<img alt="BusyBox 1.38" src="https://img.shields.io/badge/busybox-1.38-eb6f92?style=flat-square&labelColor=17141f" />
+<img alt="arch aarch64" src="https://img.shields.io/badge/arch-aarch64-9ccfd8?style=flat-square&labelColor=17141f" />
+<img alt="status: boots to shell" src="https://img.shields.io/badge/status-boots_to_shell-f6c177?style=flat-square&labelColor=17141f" />
+<img alt="license MIT" src="https://img.shields.io/badge/license-MIT-ebbcba?style=flat-square&labelColor=17141f" />
+
+<sub>kernel + busybox + initramfs · built from source on an M2 MacBook</sub>
 
 </div>
 
-## 🐧 About
+<br/>
 
-AA Linux is a small Linux distribution we're building from scratch: the Linux kernel, BusyBox and our own boot scripts. The goal is to understand every step a Linux system takes, from the moment the kernel starts to the shell prompt.
+### `~/about`
 
-> **Status:** boots to a shell in QEMU on arm64. There is no package manager and no installation to disk yet.
+A tiny Linux distribution we're building by hand: our own kernel build, BusyBox and our own boot scripts. There's no Debian or Arch underneath, nothing we didn't put there ourselves. The point is to understand every step from power-on to the shell prompt.
 
-## 📺 First boot
+> [!NOTE]
+> **Status:** boots to a shell in QEMU on arm64. No package manager and no disk install yet.
+
+### `~/first-boot`
+
+<img src="assets/boot.svg" width="100%" alt="First boot of AA Linux in QEMU: kernel log ending with 'Run /init as init process', then 'Welcome to AA Linux 0.1' and a shell running uname -sr, cat /etc/os-release and ls /" />
+
+<sub>Real output of <code>./scripts/run-qemu.sh</code>, kernel log trimmed.</sub>
+
+### `~/inside`
 
 ```text
-[    0.000000] Linux version 6.18.60 (gcc (Debian 14.2.0-19) 14.2.0) #1 SMP PREEMPT
-...
-[    0.116044] Run /init as init process
-
-Welcome to AA Linux 0.1
-
-~ # cat /etc/os-release
-NAME="AA Linux"
-ID=aa-linux
-VERSION_ID=0.1
-PRETTY_NAME="AA Linux 0.1"
-~ # uname -sr
-Linux 6.18.60
+aa-linux 0.1
+├── linux 6.18 lts     kernel, stock arm64 config, no modules
+├── busybox 1.38       one static binary: sh, init, mount, ls and ~300 more
+├── initramfs          the whole system lives in RAM
+└── rootfs/            our files: inittab, rcS, os-release
 ```
 
-## 🧩 What's inside
+### `~/boot-chain`
 
-| Part | What it does |
-| --- | --- |
-| **Linux 6.18 LTS** | The kernel, built with the stock arm64 config and no modules |
-| **BusyBox 1.38** | One static binary that provides the shell, `init` and the core commands |
-| **initramfs** | The whole system is loaded into RAM at boot |
-| **[`rootfs/`](rootfs)** | Our own files: init configuration, boot script, `os-release` |
-
-## 🚀 How it boots
-
-```mermaid
-flowchart LR
-    A[QEMU] -->|loads| B[Kernel<br/>out/Image]
-    B -->|unpacks| C[initramfs]
-    C -->|runs /init| D[BusyBox init]
-    D -->|reads /etc/inittab| E[rcS<br/>mounts /proc /sys /dev]
-    E --> F[Shell]
+```text
+power on
+ └─▶ qemu loads Image + initramfs.cpio.gz
+      └─▶ kernel unpacks the initramfs, runs /init (busybox init)
+           └─▶ init reads /etc/inittab
+                ├─▶ /etc/init.d/rcS   mounts /proc /sys /dev, sets the hostname
+                └─▶ /bin/sh           on the console, restarted if it exits
 ```
 
-## 🛠 Build and run
-
-**macOS (Apple Silicon)**
+### `~/build`
 
 ```sh
+# macOS, Apple Silicon
 brew install qemu lima
-./scripts/build-macos.sh
+./scripts/build-macos.sh   # the first run sets up a Debian VM, later rebuilds take seconds
 ./scripts/run-qemu.sh
 ```
 
-macOS can't build the Linux kernel, so `build-macos.sh` runs the build inside a Debian VM called `aa-builder` (created by [Lima](https://lima-vm.io) on the first run) and copies the result to `out/`.
-
-**Linux (arm64, Debian or Ubuntu)**
-
 ```sh
+# Linux, arm64 (Debian / Ubuntu)
 sudo apt install build-essential bc bison flex libssl-dev libelf-dev cpio curl xz-utils bzip2 qemu-system-arm
 ./scripts/build.sh
 ./scripts/run-qemu.sh
 ```
 
-To leave QEMU, type `poweroff`, or press `Ctrl-A` and then `X`.
+To leave: type `poweroff`, or press <kbd>Ctrl</kbd>+<kbd>A</kbd>, then <kbd>X</kbd>.
 
-## 📁 Repository layout
+macOS can't build the Linux kernel, so `build-macos.sh` builds inside a [Lima](https://lima-vm.io) VM called `aa-builder` and copies the result to `out/`.
 
-| Path | What it is |
-| --- | --- |
-| [`scripts/build.sh`](scripts/build.sh) | Downloads and checksums the sources, builds the kernel and BusyBox, packs the initramfs |
-| [`scripts/build-macos.sh`](scripts/build-macos.sh) | Runs `build.sh` inside a Lima VM on macOS |
-| [`scripts/run-qemu.sh`](scripts/run-qemu.sh) | Boots the result in QEMU |
-| [`rootfs/`](rootfs) | Files copied into the root filesystem as they are |
+### `~/tree`
 
-## 🗺 Roadmap
+```text
+.
+├── scripts/
+│   ├── build.sh          fetch + checksum sources, build kernel & busybox, pack initramfs
+│   ├── build-macos.sh    same, inside a lima vm
+│   └── run-qemu.sh       boot it
+├── rootfs/               copied into / as-is
+│   └── etc/
+│       ├── inittab
+│       ├── init.d/rcS
+│       └── os-release
+└── assets/               images for this readme
+```
 
-- [x] First boot to a shell in QEMU
+### `~/roadmap`
+
+- [x] Boot to a shell in QEMU
 - [ ] Our own package manager
-- [ ] Boot on real hardware (x86_64 laptop from a USB stick)
+- [ ] Real hardware: an old x86_64 laptop, booted from a USB stick
 
-## 🧰 Built with
+### `~/crew`
 
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=linux,bash,debian,apple" alt="Linux, Bash, Debian, macOS" />
-</p>
+**Altai Abdurahim** · **Atay Mahmudov**
 
-## 👥 Authors
+<br/>
 
-- **Altai Abdurahim**
-- **Atay Mahmudov**
-
-<a href="https://github.com/Doosi41/aa-linux/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Doosi41/aa-linux" alt="Contributors" />
-</a>
-
-## 📄 License
-
-[MIT](LICENSE)
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2c5364,50:203a43,100:0f2027&height=100&section=footer" width="100%" alt="" />
+<div align="center">
+<sub><a href="LICENSE">MIT</a> · made by altai × atay</sub>
+</div>
