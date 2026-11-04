@@ -1,0 +1,11 @@
+#!/bin/sh
+# First script init runs at boot: mount the kernel's virtual filesystems.
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+mount -t devtmpfs devtmpfs /dev
+hostname aa-linux
+
+. /etc/os-release
+echo
+echo "Welcome to $PRETTY_NAME"
+echo

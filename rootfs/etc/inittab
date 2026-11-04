@@ -1,0 +1,5 @@
+# BusyBox init reads this file at boot. Format: <tty>::<when>:<command>
+::sysinit:/etc/init.d/rcS
+::respawn:/bin/cttyhack /bin/sh
+::ctrlaltdel:/sbin/reboot
+::shutdown:/bin/umount -a -r
