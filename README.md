@@ -10,7 +10,7 @@
 <img src="https://img.shields.io/badge/BusyBox-1.38-2C5364?style=for-the-badge" alt="BusyBox 1.38" />
 <img src="https://img.shields.io/badge/arch-arm64-0091BD?style=for-the-badge&logo=arm&logoColor=white" alt="arm64" />
 <img src="https://img.shields.io/badge/runs_in-QEMU-FF6600?style=for-the-badge&logo=qemu&logoColor=white" alt="QEMU" />
-<img src="https://img.shields.io/badge/status-early_work-orange?style=for-the-badge" alt="status: early work" />
+<img src="https://img.shields.io/badge/status-boots_to_shell-brightgreen?style=for-the-badge" alt="status: boots to shell" />
 <img src="https://img.shields.io/github/license/Doosi41/aa-linux?style=for-the-badge" alt="license" />
 
 </div>
@@ -19,7 +19,25 @@
 
 AA Linux is a small Linux distribution we're building from scratch: the Linux kernel, BusyBox and our own boot scripts. The goal is to understand every step a Linux system takes, from the moment the kernel starts to the shell prompt.
 
-> **Status:** the build scripts are written, and the first boot in QEMU (arm64) is being tested. There is no package manager and no installation to disk yet.
+> **Status:** boots to a shell in QEMU on arm64. There is no package manager and no installation to disk yet.
+
+## 📺 First boot
+
+```text
+[    0.000000] Linux version 6.18.60 (gcc (Debian 14.2.0-19) 14.2.0) #1 SMP PREEMPT
+...
+[    0.116044] Run /init as init process
+
+Welcome to AA Linux 0.1
+
+~ # cat /etc/os-release
+NAME="AA Linux"
+ID=aa-linux
+VERSION_ID=0.1
+PRETTY_NAME="AA Linux 0.1"
+~ # uname -sr
+Linux 6.18.60
+```
 
 ## 🧩 What's inside
 
@@ -74,7 +92,7 @@ To leave QEMU, type `poweroff`, or press `Ctrl-A` and then `X`.
 
 ## 🗺 Roadmap
 
-- [ ] First boot to a shell in QEMU
+- [x] First boot to a shell in QEMU
 - [ ] Our own package manager
 - [ ] Boot on real hardware (x86_64 laptop from a USB stick)
 

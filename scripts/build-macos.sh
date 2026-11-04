@@ -8,7 +8,7 @@ VM=aa-builder
 if ! limactl list -q 2>/dev/null | grep -qx "$VM"; then
   # No shared folders: kernel sources need a case-sensitive filesystem,
   # so everything is built on the VM's own disk.
-  limactl start --name="$VM" --cpus=4 --memory=4 --mount-none --tty=false template://debian
+  limactl start --name="$VM" --cpus=4 --memory=4 --mount-none --containerd=none --tty=false template:debian-13
   limactl shell --workdir / "$VM" sudo apt-get update
   limactl shell --workdir / "$VM" sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     build-essential bc bison flex libssl-dev libelf-dev cpio curl xz-utils bzip2
